@@ -1,14 +1,12 @@
 package uk.gov.register.presentation.app;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
-@Singleton
 public class RegisterProvider {
     private final static Map<String, Register> registerMap = new HashMap<>();
 
@@ -29,7 +27,7 @@ public class RegisterProvider {
             String host = new URI(httpServletRequest.getRequestURL().toString()).getHost();
 
             //hack for functional tests
-            if (host.startsWith("localhost")) return "ft_test_pkey";
+            if (host.startsWith("localhost")) return "ft_presentation";
             else return host.replaceAll("([^\\.]+)\\.(openregister)\\..*", "$1");
 
         } catch (Exception e) {

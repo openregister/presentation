@@ -14,18 +14,20 @@ class DBProvider {
 
     private final Environment environment;
 
-    private final PresentationConfiguration configuration;
+    private final DataSourceFactory database;
+
+    private final String dbUrl;
 
     @Inject
     public DBProvider(Environment environment, PresentationConfiguration configuration) {
         this.environment = environment;
-        this.configuration = configuration;
         this.dbiFactory = createDBIFactory();
+        this.database = configuration.getDatabase();
+        this.dbUrl = database.getUrl();
     }
 
     public DBI getJdbi(String registerName) {
-        DataSourceFactory database = configuration.getDatabase();
-        database.setUrl(database.getUrl().replace("$REGISTER_NAME$", registerName));
+        database.setUrl(dbUrl.replace("$REGISTER_NAME$", registerName));
         return dbiFactory.build(environment, database, "postgres");
     }
 

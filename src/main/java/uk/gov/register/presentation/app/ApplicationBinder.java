@@ -4,6 +4,8 @@ import io.dropwizard.setup.Environment;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import uk.gov.register.presentation.config.PresentationConfiguration;
 
+import javax.inject.Singleton;
+
 class ApplicationBinder extends AbstractBinder {
     private final PresentationConfiguration configuration;
     private final Environment environment;
@@ -17,7 +19,7 @@ class ApplicationBinder extends AbstractBinder {
     protected void configure() {
         bind(environment).to(Environment.class);
         bind(configuration).to(PresentationConfiguration.class);
-        bind(DBProvider.class).to(DBProvider.class);
-        bind(RegisterProvider.class).to(RegisterProvider.class);
+        bind(DBProvider.class).to(DBProvider.class).in(Singleton.class);
+        bind(RegisterProvider.class).to(RegisterProvider.class).in(Singleton.class);
     }
 }
