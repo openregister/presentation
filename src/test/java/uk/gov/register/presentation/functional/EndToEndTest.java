@@ -3,6 +3,7 @@ package uk.gov.register.presentation.functional;
 import com.google.common.collect.ImmutableList;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
+import org.junit.Ignore;
 import org.junit.Test;
 import uk.gov.register.presentation.functional.testSupport.TestKafkaCluster;
 
@@ -30,6 +31,7 @@ public class EndToEndTest extends FunctionalTestBase {
         }
     }
 
+    @Ignore
     @Test
     public void shouldConsumeMessageFromKafkaAndShowAsFeeds() throws Exception {
         publishMessagesToKafka(ImmutableList.of(

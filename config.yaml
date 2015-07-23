@@ -1,6 +1,6 @@
 database:
   driverClass: org.postgresql.Driver
-  url: jdbc:postgresql://localhost:5432/presentation
+  url: jdbc:postgresql://localhost:5432/$REGISTER_NAME$
   user: presentation
   properties:
     charSet: UTF-8
