@@ -2,11 +2,12 @@ package uk.gov.register.presentation.resource;
 
 import com.google.common.base.Optional;
 import uk.gov.register.presentation.Entry;
-import uk.gov.register.presentation.dao.RecentEntryIndexQueryDAO;
+import uk.gov.register.presentation.app.RegisterProvider;
 import uk.gov.register.presentation.representations.ExtraMediaType;
 import uk.gov.register.presentation.view.ListResultView;
 import uk.gov.register.presentation.view.SingleResultView;
 
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -17,10 +18,9 @@ import javax.ws.rs.core.UriInfo;
 @Path("/")
 public class SearchResource extends ResourceBase {
 
-    private final RecentEntryIndexQueryDAO queryDAO;
-
-    public SearchResource(RecentEntryIndexQueryDAO queryDAO) {
-        this.queryDAO = queryDAO;
+    @Inject
+    public SearchResource(RegisterProvider registerProvider) {
+        super(registerProvider);
     }
 
     @GET

@@ -1,9 +1,10 @@
 package uk.gov.register.presentation.resource;
 
-import uk.gov.register.presentation.dao.RecentEntryIndexQueryDAO;
+import uk.gov.register.presentation.app.RegisterProvider;
 import uk.gov.register.presentation.representations.ExtraMediaType;
 import uk.gov.register.presentation.view.ListResultView;
 
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -11,10 +12,9 @@ import javax.ws.rs.core.MediaType;
 
 @Path("/")
 public class DataResource extends ResourceBase {
-    private final RecentEntryIndexQueryDAO queryDAO;
-
-    public DataResource(RecentEntryIndexQueryDAO queryDAO) {
-        this.queryDAO = queryDAO;
+    @Inject
+    public DataResource(RegisterProvider registerProvider) {
+        super(registerProvider);
     }
 
     @GET
