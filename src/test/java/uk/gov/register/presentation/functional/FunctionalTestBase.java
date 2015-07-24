@@ -41,6 +41,7 @@ public class FunctionalTestBase {
     static void publishMessagesToDB(List<String> messages) {
         org.apache.tomcat.jdbc.pool.DataSource dataSource = new org.apache.tomcat.jdbc.pool.DataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
+        dataSource.setUsername(DATABASE_USER);
         dataSource.setUrl(DATABASE_URL);
         try (Connection connection = dataSource.getConnection()) {
             for (String message : messages) {

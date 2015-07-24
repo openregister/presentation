@@ -21,7 +21,7 @@ public class CleanDatabaseRule extends ExternalResource {
     protected void before() throws Throwable {
         try (Connection connection = DriverManager.getConnection(pgUrl, pgUser, "");
              Statement statement = connection.createStatement()) {
-            statement.execute("DROP TABLE " + tableName);
+            statement.execute("DROP TABLE IF EXISTS " + tableName);
             statement.execute("CREATE TABLE " + tableName + " (ID SERIAL PRIMARY KEY, ENTRY JSONB)");
         }
     }
