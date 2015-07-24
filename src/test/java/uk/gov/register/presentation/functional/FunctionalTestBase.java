@@ -8,11 +8,14 @@ import uk.gov.register.presentation.functional.testSupport.CleanDatabaseRule;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.core.Response;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 public class FunctionalTestBase {
     public static final String DATABASE_URL = "jdbc:postgresql://localhost:5432/ft_presentation";
+    public static final String DATABASE_USER = "ft_presentation";
     public static final int APPLICATION_PORT = 9000;
 
     private static final String TABLE_NAME = "ordered_entry_index";
@@ -20,7 +23,7 @@ public class FunctionalTestBase {
     protected static Client client;
 
     @ClassRule
-    public static CleanDatabaseRule cleanDatabaseRule = new CleanDatabaseRule(DATABASE_URL, TABLE_NAME);
+    public static CleanDatabaseRule cleanDatabaseRule = new CleanDatabaseRule(DATABASE_URL, DATABASE_USER, TABLE_NAME);
 
     @BeforeClass
     public static void beforeClass() throws InterruptedException {
