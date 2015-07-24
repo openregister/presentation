@@ -1,27 +1,22 @@
 package uk.gov.register.presentation.resource;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.Context;
-import java.net.URI;
+import uk.gov.register.presentation.app.Register;
+import uk.gov.register.presentation.app.RegisterProvider;
+import uk.gov.register.presentation.dao.RecentEntryIndexQueryDAO;
 
 public abstract class ResourceBase {
     public static final int ENTRY_LIMIT = 100;
-    @Context
-    protected HttpServletRequest httpServletRequest;
 
-    //Note: copied the logic to fetch primary key from alpha register.
-    //Note: We might need to change the logic of extracting register primary key for beta registers
+    protected final Register register;
+    protected final RecentEntryIndexQueryDAO queryDAO;
+
+    public ResourceBase(RegisterProvider registerProvider) {
+        this.register = registerProvider.provide();
+        this.queryDAO = register.getQueryDAO();
+    }
+
     protected String getRegisterPrimaryKey() {
-        try {
-            String host = new URI(httpServletRequest.getRequestURL().toString()).getHost();
-
-            //hack for functional tests
-            if (host.startsWith("localhost")) return "ft_test_pkey";
-            else return host.replaceAll("([^\\.]+)\\.(openregister)\\..*", "$1");
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return register.getName();
     }
 }
 
