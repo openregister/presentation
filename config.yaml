@@ -2,6 +2,7 @@ database:
   driverClass: org.postgresql.Driver
   url: jdbc:postgresql://localhost:5432/$REGISTER_NAME$
   user: presentation
+  readOnlyByDefault: true
   properties:
     charSet: UTF-8
 
