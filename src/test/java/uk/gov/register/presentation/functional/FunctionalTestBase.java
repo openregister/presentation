@@ -14,11 +14,11 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class FunctionalTestBase {
-    public static final String DATABASE_URL = "jdbc:postgresql://localhost:5432/ft_presentation";
-    public static final String DATABASE_USER = "ft_presentation";
-    public static final int APPLICATION_PORT = 9000;
-
+    public static final String REGISTER_NAME = "ft_presentation";
+    public static final String DATABASE_URL = "jdbc:postgresql://localhost:5432/" + REGISTER_NAME;
+    public static final String DATABASE_USER = REGISTER_NAME;
     private static final String TABLE_NAME = "ordered_entry_index";
+    public static final int APPLICATION_PORT = 9000;
 
     protected static Client client;
 
