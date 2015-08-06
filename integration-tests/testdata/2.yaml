@@ -1,0 +1,9 @@
+Description: 'A school entry found'
+request:
+  path: '/hash/600067d697eecf0e2915224c3e3031d1ec446801.json'
+response:
+  statuscode: 200
+  matches: "{\"hash\":\"600067d697eecf0e2915224c3e3031d1ec446801\",\"entry\":{\"name\":\"Sir John Cass's Foundation Primary School\",\"gender\":\"\",\"school\":\"100000\",\"address\":\"200000071925\",\"website\":\"http://www.sirjohncassprimary.org\",\"end-date\":\"\",\"start-date\":\"\",\"headteacher\":\"Mr T Wilson\",\"maximum-age\":\"10\",\"minimum-age\":\"3\",\"religious-character\":\"Church of England\"},\"last-updated\":\"2015-06-16T09:51:54.097Z\"}"
+  matchRegex: '^.*?"hash"\s*:\s*"600067d697eecf0e2915224c3e3031d1ec446801".*$'
+  contains: '600067d697eecf0e2915224c3e3031d1ec446801'
+  matchFileContents: '2.json'

@@ -1,0 +1,7 @@
+Description: 'A school entry test must fail'
+request:
+  path: '/hash/600067d697eecf0e2915224c3e3031d1ec446833.json'
+response:
+  statuscode: 200
+  matches:
+

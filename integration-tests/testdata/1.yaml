@@ -1,0 +1,6 @@
+Description: 'Home page'
+request:
+  path: '/'
+response:
+  statuscode: 200
+  matches:
