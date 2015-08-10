@@ -8,19 +8,22 @@ import uk.gov.register.presentation.functional.testSupport.CleanDatabaseRule;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.core.Response;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 public class FunctionalTestBase {
-    public static final String DATABASE_URL = "jdbc:postgresql://localhost:5432/ft_presentation";
-    public static final int APPLICATION_PORT = 9000;
-
+    public static final String REGISTER_NAME = "ft_presentation";
+    public static final String DATABASE_URL = "jdbc:postgresql://localhost:5432/" + REGISTER_NAME;
+    public static final String DATABASE_USER = REGISTER_NAME;
     private static final String TABLE_NAME = "ordered_entry_index";
+    public static final int APPLICATION_PORT = 9000;
 
     protected static Client client;
 
     @ClassRule
-    public static CleanDatabaseRule cleanDatabaseRule = new CleanDatabaseRule(DATABASE_URL, TABLE_NAME);
+    public static CleanDatabaseRule cleanDatabaseRule = new CleanDatabaseRule(DATABASE_URL, DATABASE_USER, TABLE_NAME);
 
     @BeforeClass
     public static void beforeClass() throws InterruptedException {
@@ -38,6 +41,7 @@ public class FunctionalTestBase {
     static void publishMessagesToDB(List<String> messages) {
         org.apache.tomcat.jdbc.pool.DataSource dataSource = new org.apache.tomcat.jdbc.pool.DataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
+        dataSource.setUsername(DATABASE_USER);
         dataSource.setUrl(DATABASE_URL);
         try (Connection connection = dataSource.getConnection()) {
             for (String message : messages) {

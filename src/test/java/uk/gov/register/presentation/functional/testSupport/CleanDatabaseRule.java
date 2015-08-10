@@ -7,19 +7,22 @@ import java.sql.DriverManager;
 import java.sql.Statement;
 
 public class CleanDatabaseRule extends ExternalResource {
+    private final String pgUser;
     private final String tableName;
     private final String pgUrl;
 
-    public CleanDatabaseRule(String pgUrl, String tableName) {
+    public CleanDatabaseRule(String pgUrl, String pgUser, String tableName) {
+        this.pgUser = pgUser;
         this.tableName = tableName;
         this.pgUrl = pgUrl;
     }
 
     @Override
     protected void before() throws Throwable {
-        try (Connection connection = DriverManager.getConnection(pgUrl);
+        try (Connection connection = DriverManager.getConnection(pgUrl, pgUser, "");
              Statement statement = connection.createStatement()) {
-            statement.execute("DELETE FROM " + tableName);
+            statement.execute("DROP TABLE IF EXISTS " + tableName);
+            statement.execute("CREATE TABLE " + tableName + " (ID SERIAL PRIMARY KEY, ENTRY JSONB)");
         }
     }
 }

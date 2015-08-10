@@ -2,11 +2,12 @@ package uk.gov.register.presentation.functional.testSupport;
 
 import io.dropwizard.testing.ResourceHelpers;
 import uk.gov.register.presentation.app.PresentationApplication;
+import uk.gov.register.presentation.functional.FunctionalTestBase;
 
 public class PresentationApplicationRunner {
-    public static final String DATABASE_URL = "jdbc:postgresql://localhost:5432/ft_presentation";
+    public static final String DATABASE_URL = FunctionalTestBase.DATABASE_URL;
+    public static final String TOPIC = FunctionalTestBase.REGISTER_NAME;
 
-    public static final String TOPIC = "register";
     private static final TestKafkaCluster testKafkaCluster = new TestKafkaCluster(TOPIC);
 
     public static void main(String[] args) throws Throwable {
@@ -18,6 +19,5 @@ public class PresentationApplicationRunner {
 
         PresentationApplication.main(a);
         Thread.currentThread().join();
-
     }
 }

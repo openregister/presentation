@@ -17,7 +17,7 @@ public class EndToEndTest extends FunctionalTestBase {
     static void publishMessagesToKafka(List<String> messages) {
         Producer<String, byte[]> producer = TestKafkaCluster.getProducer();
         for (String message : messages) {
-            producer.send(new ProducerRecord<>("register", message.getBytes()));
+            producer.send(new ProducerRecord<>(REGISTER_NAME, message.getBytes()));
         }
         waitForAppToConsumeMessage();
     }
@@ -33,13 +33,13 @@ public class EndToEndTest extends FunctionalTestBase {
     @Test
     public void shouldConsumeMessageFromKafkaAndShowAsFeeds() throws Exception {
         publishMessagesToKafka(ImmutableList.of(
-                "{\"hash\":\"entryHash1\", \"entry\":{\"ft_test_pkey\":\"ft_test_pkey_value_1\", \"key1\":\"key1Value_1\"}}",
-                "{\"hash\":\"entryHash2\", \"entry\":{\"ft_test_pkey\":\"ft_test_pkey_value_2\", \"key1\":\"key1Value_2\"}}"
+                "{\"hash\":\"entryHash1\", \"entry\":{\"ft_presentation\":\"ft_presentation_value_1\", \"key1\":\"key1Value_1\"}}",
+                "{\"hash\":\"entryHash2\", \"entry\":{\"ft_presentation\":\"ft_presentation_value_2\", \"key1\":\"key1Value_2\"}}"
         ));
 
         Response response = client.target("http://localhost:" + APPLICATION_PORT + "/feed.json").request().get();
 
-        assertThat(response.readEntity(String.class), equalTo("[{\"hash\":\"entryHash2\",\"entry\":{\"key1\":\"key1Value_2\",\"ft_test_pkey\":\"ft_test_pkey_value_2\"}},{\"hash\":\"entryHash1\",\"entry\":{\"key1\":\"key1Value_1\",\"ft_test_pkey\":\"ft_test_pkey_value_1\"}}]"));
+        assertThat(response.readEntity(String.class), equalTo("[{\"hash\":\"entryHash2\",\"entry\":{\"key1\":\"key1Value_2\",\"ft_presentation\":\"ft_presentation_value_2\"}},{\"hash\":\"entryHash1\",\"entry\":{\"key1\":\"key1Value_1\",\"ft_presentation\":\"ft_presentation_value_1\"}}]"));
 
     }
 

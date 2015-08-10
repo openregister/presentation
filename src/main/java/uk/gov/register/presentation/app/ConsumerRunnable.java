@@ -20,10 +20,11 @@ import java.util.Properties;
 public class ConsumerRunnable implements Runnable {
 
     private final Properties properties;
-    public static final String TOPIC_NAME = "register";
+    private final String topicName;
     private final RecentEntryIndexUpdateDAO updateDAO;
 
-    public ConsumerRunnable(ZookeeperConfiguration zkConfig, RecentEntryIndexUpdateDAO updateDAO) {
+    public ConsumerRunnable(ZookeeperConfiguration zkConfig, String topicName, RecentEntryIndexUpdateDAO updateDAO) {
+        this.topicName = topicName;
         this.updateDAO = updateDAO;
         properties = new Properties();
         properties.put("zookeeper.connect", zkConfig.getZookeeperServer());
@@ -42,8 +43,8 @@ public class ConsumerRunnable implements Runnable {
     public void run() {
         ConsumerConnector consumerConnector = Consumer.createJavaConsumerConnector(new ConsumerConfig(properties));
         StringDecoder keyDecoder = new StringDecoder(new VerifiableProperties());
-        Map<String, List<KafkaStream<String, byte[]>>> messageStreams = consumerConnector.createMessageStreams(ImmutableMap.of(TOPIC_NAME, 1), keyDecoder, bytes -> bytes);
-        KafkaStream<String, byte[]> kafkaStream = messageStreams.get(TOPIC_NAME).get(0);
+        Map<String, List<KafkaStream<String, byte[]>>> messageStreams = consumerConnector.createMessageStreams(ImmutableMap.of(topicName, 1), keyDecoder, bytes -> bytes);
+        KafkaStream<String, byte[]> kafkaStream = messageStreams.get(topicName).get(0);
         for (MessageAndMetadata<String, byte[]> messageAndMetadata : kafkaStream) {
             byte[] message = messageAndMetadata.message();
             //TODO: check can we directly get getBytes into string

@@ -8,7 +8,6 @@ import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
 import io.dropwizard.configuration.SubstitutingSourceProvider;
 import io.dropwizard.jdbi.DBIFactory;
 import io.dropwizard.jersey.DropwizardResourceConfig;
-import io.dropwizard.jersey.setup.JerseyEnvironment;
 import io.dropwizard.jetty.MutableServletContextHandler;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -17,7 +16,6 @@ import io.dropwizard.views.mustache.MustacheViewRenderer;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.glassfish.jersey.server.ServerProperties;
-import org.skife.jdbi.v2.DBI;
 import uk.gov.register.presentation.config.PresentationConfiguration;
 import uk.gov.register.presentation.dao.RecentEntryIndexQueryDAO;
 import uk.gov.register.presentation.dao.RecentEntryIndexUpdateDAO;
@@ -28,12 +26,11 @@ import uk.gov.register.presentation.representations.TurtleWriter;
 import uk.gov.register.presentation.resource.DataResource;
 import uk.gov.register.presentation.resource.HomePageResource;
 import uk.gov.register.presentation.resource.SearchResource;
+import uk.gov.register.presentation.representations.TurtleWriter;
 
 import javax.servlet.DispatcherType;
 import javax.ws.rs.core.MediaType;
 import java.util.EnumSet;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class PresentationApplication extends Application<PresentationConfiguration> {
 
@@ -58,15 +55,10 @@ public class PresentationApplication extends Application<PresentationConfigurati
 
     @Override
     public void run(PresentationConfiguration configuration, Environment environment) throws Exception {
-        DBIFactory dbiFactory = new DBIFactory();
-        DBI jdbi = dbiFactory.build(environment, configuration.getDatabase(), "postgres");
-        RecentEntryIndexUpdateDAO updateDAO = jdbi.onDemand(RecentEntryIndexUpdateDAO.class);
-        RecentEntryIndexQueryDAO queryDAO = jdbi.onDemand(RecentEntryIndexQueryDAO.class);
-
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        executorService.execute(new ConsumerRunnable(configuration, updateDAO));
-
         DropwizardResourceConfig resourceConfig = environment.jersey().getResourceConfig();
+        resourceConfig.register(new ApplicationBinder(configuration, environment));
+        resourceConfig.packages("uk.gov.register.presentation.resource");
+
         resourceConfig.property(ServerProperties.MEDIA_TYPE_MAPPINGS, ImmutableMap.of(
                 "csv", ExtraMediaType.TEXT_CSV_TYPE,
                 "tsv", ExtraMediaType.TEXT_TSV_TYPE,
@@ -75,11 +67,6 @@ public class PresentationApplication extends Application<PresentationConfigurati
         environment.jersey().register(new CsvWriter());
         environment.jersey().register(new TsvWriter());
         environment.jersey().register(new TurtleWriter());
-
-        JerseyEnvironment jersey = environment.jersey();
-        jersey.register(new DataResource(queryDAO));
-        jersey.register(new HomePageResource());
-        jersey.register(new SearchResource(queryDAO));
 
         MutableServletContextHandler applicationContext = environment.getApplicationContext();
 
