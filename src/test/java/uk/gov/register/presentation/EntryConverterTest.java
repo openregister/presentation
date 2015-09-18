@@ -22,7 +22,7 @@ public class EntryConverterTest {
 
     @Test
     public void convert_convertsTheDbEntryToEntryView() throws IOException {
-        EntryConverter entryConverter = new EntryConverter(new FieldsConfiguration(), requestContext);
+        EntryConverter entryConverter = new EntryConverter(new FieldsConfiguration(), requestContext, () -> "openregister.org");
         ObjectMapper objectMapper = Jackson.newObjectMapper();
         JsonNode jsonNode = objectMapper.readValue("{\"registry\":\"somevalue\"}", JsonNode.class);
 

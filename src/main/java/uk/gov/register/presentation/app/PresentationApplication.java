@@ -81,6 +81,7 @@ public class PresentationApplication extends Application<PresentationConfigurati
         jerseyEnvironment.register(new AbstractBinder() {
             @Override
             protected void configure() {
+                bind(configuration);
                 bind(queryDAO).to(RecentEntryIndexQueryDAO.class);
                 bind(FieldsConfiguration.class).to(FieldsConfiguration.class).in(Singleton.class);
                 bind(RequestContext.class).to(RequestContext.class);
