@@ -35,7 +35,7 @@ public class TurtleWriterTest {
     public void rendersLinksCorrectlyAsUrls() throws Exception {
         Map<String, FieldValue> entryMap =
                 ImmutableMap.of(
-                        "registered-address", new LinkValue("address", "1111111"),
+                        "registered-address", new LinkValue("address", "1111111", "openregister.org"),
                         "name", new StringValue("foo")
                 );
 
