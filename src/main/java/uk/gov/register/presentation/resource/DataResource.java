@@ -55,7 +55,7 @@ public class DataResource {
     @Path("/feed")
     @Produces({ExtraMediaType.TEXT_HTML, MediaType.APPLICATION_JSON, ExtraMediaType.TEXT_YAML, ExtraMediaType.TEXT_CSV, ExtraMediaType.TEXT_TSV, ExtraMediaType.TEXT_TTL})
     public EntryListView feed(@QueryParam("pageIndex") Optional<Long> pageIndex, @QueryParam("pageSize") Optional<Long> pageSize) {
-        Pagination pagination = new Pagination("/feed", pageIndex, pageSize, queryDAO.getTotalEntriesCount());
+        Pagination pagination = new Pagination("/feed", pageIndex, pageSize, queryDAO.getTotalEntries());
 
         setNextAndPreviousPageLinkHeader(pagination);
 

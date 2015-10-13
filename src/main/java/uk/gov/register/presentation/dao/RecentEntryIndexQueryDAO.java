@@ -35,7 +35,7 @@ public interface RecentEntryIndexQueryDAO {
     List<DbEntry> getLatestEntriesOfRecords(@Bind("limit") long maxNumberToFetch, @Bind("offset") long offset);
 
     @SqlQuery("SELECT COUNT FROM REGISTER_ENTRIES_COUNT")
-    int getTotalEntriesCount();
+    int getTotalEntries();
 
     @SqlQuery("SELECT COUNT(*) FROM CURRENT_KEYS")
     int getTotalRecords();
