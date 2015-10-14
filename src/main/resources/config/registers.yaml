@@ -53,7 +53,7 @@
   entry:
     text: "The register of [Foreign & Commonwealth Office](https://www.gov.uk/government/organisations/foreign-commonwealth-office)\
       \ list of approved British English-language names and descriptive terms for\
-      \ [countries](http://country.openregister.org) and territories of the world\
+      \ [countries](http://country.prod.openregister.org) and territories of the world\
       \ and their citizens.\n"
     fields:
     - "country"
@@ -91,7 +91,7 @@
 - hash: "1e5b3697a1e43a13a707d76ac079b98dea05393f"
   entry:
     text: "The register of [Post towns](http://en.wikipedia.org/wiki/Post_town) which\
-      \ may appear in postal [addresses](http://address.openregister.org) in the UK.\n"
+      \ may appear in postal [addresses](http://address.prod.openregister.org) in the UK.\n"
     fields:
     - "post-town"
     - "start-date"
@@ -102,7 +102,7 @@
   last-updated: "2015-09-24T16:11:39.051Z"
 - hash: "0fc4b18d1d8bae695b69bd36e1c9d6589d53247f"
   entry:
-    text: "The register of UK Postal codes which may appear in an [address](http://address.openregister.org).\n"
+    text: "The register of UK Postal codes which may appear in an [address](http://address.prod.openregister.org).\n"
     fields:
     - "postcode"
     - "latitude"

@@ -37,7 +37,7 @@ public class EntryConverterTest {
 
         EntryView entryView = entryConverter.convert(new DbEntry(13, new DbContent("somehash", jsonNode)));
 
-        assertThat(((LinkValue) entryView.getField("registry").get()).link(), equalTo("http://public-body.openregister.org/public-body/somevalue"));
+        assertThat(((LinkValue) entryView.getField("registry").get()).link(), equalTo("http://public-body.prod.openregister.org/public-body/somevalue"));
     }
 
     @Test

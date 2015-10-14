@@ -32,6 +32,6 @@ public class FunctionalTestBase {
     }
 
     Response getRequest(String registerName, String path) {
-        return client.target(String.format("http://localhost:%d%s", APPLICATION_PORT, path)).request().header("Host", registerName + ".beta.openregister.org").get();
+        return client.target(String.format("http://localhost:%d%s", APPLICATION_PORT, path)).request().header("Host", registerName + ".prod.openregister.org").get();
     }
 }
