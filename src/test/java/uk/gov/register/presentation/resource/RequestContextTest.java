@@ -22,7 +22,7 @@ public class RequestContextTest {
     public void takesRegisterNameFromHttpHost() throws Exception {
         RequestContext requestContext = new RequestContext(new RegistersConfiguration(new PublicBodiesConfiguration()));
         requestContext.httpServletRequest = httpServletRequest;
-        when(httpServletRequest.getHeader("Host")).thenReturn("school.beta.openregister.org");
+        when(httpServletRequest.getHeader("Host")).thenReturn("school.prod.openregister.org");
 
         String registerPrimaryKey = requestContext.getRegisterPrimaryKey();
 

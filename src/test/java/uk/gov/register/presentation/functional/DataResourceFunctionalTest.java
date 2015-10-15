@@ -46,7 +46,7 @@ public class DataResourceFunctionalTest extends FunctionalTestBase {
         Response response = getRequest("/all.json");
 
         assertThat(response.getStatus(), equalTo(301));
-        assertThat(response.getHeaderString("Location"), equalTo("http://address.beta.openregister.org/current.json"));
+        assertThat(response.getHeaderString("Location"), equalTo("http://address.prod.openregister.org/current.json"));
 
     }
 
@@ -55,7 +55,7 @@ public class DataResourceFunctionalTest extends FunctionalTestBase {
         Response response = getRequest("/latest.json");
 
         assertThat(response.getStatus(), equalTo(301));
-        assertThat(response.getHeaderString("Location"), equalTo("http://address.beta.openregister.org/feed.json"));
+        assertThat(response.getHeaderString("Location"), equalTo("http://address.prod.openregister.org/feed.json"));
 
     }
 

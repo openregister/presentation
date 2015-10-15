@@ -4,6 +4,7 @@ import org.jvnet.hk2.annotations.Service;
 import uk.gov.register.presentation.EntryView;
 import uk.gov.register.presentation.FieldValue;
 import uk.gov.register.presentation.LinkValue;
+import uk.gov.register.presentation.RegisterHostSubDomain;
 import uk.gov.register.presentation.ListValue;
 import uk.gov.register.presentation.config.Register;
 import uk.gov.register.presentation.resource.RequestContext;
@@ -23,7 +24,7 @@ import java.util.stream.StreamSupport;
 @Produces(ExtraMediaType.TEXT_TTL)
 @Service
 public class TurtleWriter extends RepresentationWriter {
-    private static final String PREFIX = "@prefix field: <http://field.openregister.org/field/>.\n\n";
+    private static final String PREFIX = "@prefix field: <http://field." + RegisterHostSubDomain.REGISTER_HOST_SUB_DOMAIN + "/field/>.\n\n";
 
     private final RequestContext requestContext;
 

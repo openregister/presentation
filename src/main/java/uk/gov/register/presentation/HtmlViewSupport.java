@@ -21,6 +21,6 @@ public class HtmlViewSupport {
     }
 
     public static String fieldLink(String fieldName) {
-        return UriBuilder.fromPath("http://field.openregister.org/field").path(fieldName).build().toString();
+        return UriBuilder.fromPath("http://field." + RegisterHostSubDomain.REGISTER_HOST_SUB_DOMAIN + "/field").path(fieldName).build().toString();
     }
 }

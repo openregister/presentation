@@ -52,7 +52,7 @@ public class TurtleWriterTest {
         turtleWriter.writeEntriesTo(entityStream, new Register("company", ImmutableSet.of("company", "registered-address", "name"), "", new PublicBody("Companies House", "companies-house"), ""), Collections.singletonList(entry));
 
 
-        assertThat(entityStream.contents, containsString("field:registered-address <http://address.openregister.org/address/1111111>"));
+        assertThat(entityStream.contents, containsString("field:registered-address <http://address.prod.openregister.org/address/1111111>"));
         assertThat(entityStream.contents, containsString("field:name \"foo\""));
     }
 
@@ -72,8 +72,8 @@ public class TurtleWriterTest {
         turtleWriter.writeEntriesTo(entityStream, new Register("company", ImmutableSet.of("link-values", "string-values", "name"), "", new PublicBody("Companies House", "companies-house"), ""), Collections.singletonList(entry));
 
 
-        assertThat(entityStream.contents, containsString("field:link-values <http://address.openregister.org/address/1111111>"));
-        assertThat(entityStream.contents, containsString("field:link-values <http://address.openregister.org/address/2222222>"));
+        assertThat(entityStream.contents, containsString("field:link-values <http://address.prod.openregister.org/address/1111111>"));
+        assertThat(entityStream.contents, containsString("field:link-values <http://address.prod.openregister.org/address/2222222>"));
         assertThat(entityStream.contents, containsString("field:string-values \"value1\""));
         assertThat(entityStream.contents, containsString("field:string-values \"value2\""));
         assertThat(entityStream.contents, containsString("field:name \"foo\""));
