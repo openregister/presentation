@@ -7,6 +7,8 @@ import java.util.Optional;
 
 public class Pagination {
 
+    public static final long ENTRY_LIMIT = 100;
+
     private final long pageIndex;
     private final String resourcePath;
     private final long totalEntries;
@@ -17,7 +19,7 @@ public class Pagination {
         this.totalEntries = totalEntries;
 
         this.pageIndex = optionalPageIndex.orElse(1L);
-        this.pageSize = optionalPageSize.orElse(DataResource.ENTRY_LIMIT);
+        this.pageSize = optionalPageSize.orElse(ENTRY_LIMIT);
 
         if (this.pageSize <= 0 || this.pageIndex <= 0) {
             throw new BadRequestException();

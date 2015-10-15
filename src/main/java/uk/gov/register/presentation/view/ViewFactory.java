@@ -38,10 +38,10 @@ public class ViewFactory {
         );
     }
 
-    public EntryListView getRecordEntriesView(List<DbEntry> allDbEntries) {
+    public EntryListView getRecordEntriesView(List<DbEntry> allDbEntries, Pagination pagination) {
         return new EntryListView(requestContext,
                 allDbEntries.stream().map(entryConverter::convert).collect(Collectors.toList()),
-                null,
+                pagination,
                 "current.html"
         );
     }

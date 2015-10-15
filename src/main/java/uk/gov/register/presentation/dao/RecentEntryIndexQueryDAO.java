@@ -31,9 +31,12 @@ public interface RecentEntryIndexQueryDAO {
     @SingleValueResult(DbEntry.class)
     Optional<DbEntry> findBySerial(@Bind("serial") long serial);
 
-    @SqlQuery("SELECT SERIAL_NUMBER,ENTRY FROM ORDERED_ENTRY_INDEX WHERE SERIAL_NUMBER IN(SELECT SERIAL_NUMBER FROM CURRENT_KEYS ORDER BY SERIAL_NUMBER DESC LIMIT :limit) ORDER BY SERIAL_NUMBER DESC")
-    List<DbEntry> getLatestEntriesOfRecords(@Bind("limit") long maxNumberToFetch);
+    @SqlQuery("SELECT SERIAL_NUMBER,ENTRY FROM ORDERED_ENTRY_INDEX WHERE SERIAL_NUMBER IN(SELECT SERIAL_NUMBER FROM CURRENT_KEYS ORDER BY SERIAL_NUMBER DESC LIMIT :limit OFFSET :offset) ORDER BY SERIAL_NUMBER DESC")
+    List<DbEntry> getLatestEntriesOfRecords(@Bind("limit") long maxNumberToFetch, @Bind("offset") long offset);
 
     @SqlQuery("SELECT COUNT FROM REGISTER_ENTRIES_COUNT")
-    int getTotalEntriesCount();
+    int getTotalEntries();
+
+    @SqlQuery("SELECT COUNT(*) FROM CURRENT_KEYS")
+    int getTotalRecords();
 }

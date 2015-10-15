@@ -1,7 +1,6 @@
 package uk.gov.register.presentation.functional;
 
 import com.google.common.collect.ImmutableList;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -9,10 +8,6 @@ import uk.gov.register.presentation.representations.DBSupport;
 
 import javax.ws.rs.core.Response;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -59,12 +54,16 @@ public class DataResourceFunctionalTest extends FunctionalTestBase {
 
     }
 
-    private Map<String, String> createRelToLinkMap(Response response) {
-        String link = response.getHeaderString("Link");
-        return StringUtils.isNotEmpty(link) ? Stream.of(link.split(","))
-                .map(h -> h.split(";"))
-                .collect(Collectors.toMap(h -> h[1].trim().replaceAll("rel=\"([a-z]+)\"", "$1"), h -> h[0].trim().replaceAll("<([^>]+)>", "$1")))
-                : Collections.emptyMap();
+    @Test
+    public void current_hasLinkHeaderForNextAndPreviousPage() {
+        Response response = getRequest("/current.json?pageIndex=1&pageSize=1");
+        assertThat(response.getHeaderString("Link"), equalTo("</current?pageIndex=2&pageSize=1>; rel=\"next\""));
+
+        response = getRequest("/current.json?pageIndex=2&pageSize=1");
+        assertThat(response.getHeaderString("Link"), equalTo("</current?pageIndex=3&pageSize=1>; rel=\"next\",</current?pageIndex=1&pageSize=1>; rel=\"previous\""));
+
+        response = getRequest("/current.json?pageIndex=3&pageSize=1");
+        assertThat(response.getHeaderString("Link"), equalTo("</current?pageIndex=2&pageSize=1>; rel=\"previous\""));
     }
 }
 
