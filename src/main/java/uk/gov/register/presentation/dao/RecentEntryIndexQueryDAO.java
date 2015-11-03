@@ -13,27 +13,27 @@ import java.util.Optional;
 @RegisterMapper(EntryMapper.class)
 public interface RecentEntryIndexQueryDAO {
 
-    @SqlQuery("SELECT serial_number,entry FROM ordered_entry_index ORDER BY serial_number DESC LIMIT :limit OFFSET :offset")
+    @SqlQuery("select serial_number,entry from ordered_entry_index order by serial_number desc limit :limit offset :offset")
     List<DbEntry> getAllEntries(@Bind("limit") long maxNumberToFetch, @Bind("offset") long offset);
 
-    @SqlQuery("SELECT serial_number,entry FROM ordered_entry_index WHERE serial_number = (SELECT serial_number FROM CURRENT_KEYS WHERE key = :key)")
+    @SqlQuery("select serial_number,entry from ordered_entry_index where serial_number = (select serial_number from current_keys where key = :key)")
     @SingleValueResult(DbEntry.class)
     Optional<DbEntry> findByPrimaryKey(@Bind("key") String key);
 
-    @SqlQuery("SELECT serial_number,entry FROM ordered_entry_index WHERE (entry #>> ARRAY['entry',:key]) = :value ORDER BY serial_number DESC")
+    @SqlQuery("select serial_number,entry from ordered_entry_index where (entry #>> array['entry',:key]) = :value order by serial_number desc")
     List<DbEntry> findAllByKeyValue(@Bind("key") String key, @Bind("value") String value);
 
-    @SqlQuery("SELECT serial_number,entry FROM ordered_entry_index WHERE (entry #>> ARRAY['hash']) = :hash")
+    @SqlQuery("select serial_number,entry from ordered_entry_index where (entry #>> array['hash']) = :hash")
     @SingleValueResult(DbEntry.class)
     Optional<DbEntry> findByHash(@Bind("hash") String hash);
 
-    @SqlQuery("SELECT serial_number,entry from ordered_entry_index where serial_number = :serial")
+    @SqlQuery("select serial_number,entry from ordered_entry_index where serial_number = :serial")
     @SingleValueResult(DbEntry.class)
     Optional<DbEntry> findBySerial(@Bind("serial") long serial);
 
-    @SqlQuery("SELECT SERIAL_NUMBER,ENTRY FROM ORDERED_ENTRY_INDEX WHERE SERIAL_NUMBER IN(SELECT SERIAL_NUMBER FROM CURRENT_KEYS ORDER BY SERIAL_NUMBER DESC LIMIT :limit) ORDER BY SERIAL_NUMBER DESC")
+    @SqlQuery("select serial_number,entry from ordered_entry_index where serial_number in(select serial_number from current_keys order by serial_number desc limit :limit) order by serial_number desc")
     List<DbEntry> getLatestEntriesOfRecords(@Bind("limit") long maxNumberToFetch);
 
-    @SqlQuery("SELECT COUNT FROM REGISTER_ENTRIES_COUNT")
+    @SqlQuery("select count from register_entries_count")
     int getTotalEntriesCount();
 }
