@@ -27,6 +27,8 @@
             <p>Registers are made up of entries containing fields of data. To build services on top of these registers you can access the data in a variety of formats.</p>
             <h3>Fields in this register:</h3>
             <div class="field-list"> <ul><li th:each="field : ${register.fields}" th:text="${field}"></li></ul> </div>
+
+            <h4 class="no-underline"><a th:href="${linkToRegisterRegister}" th:text="${'Meta information about ' + registerId + ' register'}"></a></h4>
         </div>
         <div class="column-third">
             <ul class="side-nav">
