@@ -12,3 +12,10 @@ stderr.txt
 deploy/config.yaml
 deploy/*.jar
 deployable_bundle
+
+
+performance/lib/
+performance/build/
+performance/.gradle/
+performance/target/
+performance/results/*

@@ -1,0 +1,33 @@
+apply plugin: 'java'
+
+group 'presentation-load'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile('io.gatling.highcharts:gatling-charts-highcharts:2.2.0-M3')
+}
+
+task copyDeps << {
+    String libDirName='lib'
+
+    def libdir = new File('.', libDirName)
+    libdir.delete()
+    libdir.mkdirs()
+
+    copy{
+        from 'zinc/'
+        into "$libDirName/zinc"
+    }
+    copy{
+        from 'scala-compiler-2.11.7.jar'
+        into libDirName
+    }
+
+    copy{
+        from configurations.runtime
+        into libDirName
+    }
+}
