@@ -1,7 +1,10 @@
 package uk.gov.register.presentation.resource;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import io.dropwizard.views.View;
 import org.glassfish.jersey.media.multipart.ContentDisposition;
+import org.slf4j.LoggerFactory;
+import uk.gov.register.presentation.DbEntry;
 import uk.gov.register.presentation.dao.RecentEntryIndexQueryDAO;
 import uk.gov.register.presentation.representations.ExtraMediaType;
 import uk.gov.register.presentation.view.EntryListView;
@@ -12,18 +15,20 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.*;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 @Path("/")
 public class DataResource {
     protected final RequestContext requestContext;
     private final RecentEntryIndexQueryDAO queryDAO;
+    private final org.slf4j.Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final ViewFactory viewFactory;
 
@@ -36,18 +41,43 @@ public class DataResource {
 
     @GET
     @Path("/download")
-    @Produces(ExtraMediaType.TEXT_HTML)
-    public View download() {
-        return viewFactory.thymeleafView("download.html");
-    }
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response downloadRegister(@QueryParam(Pagination.INDEX_PARAM) Optional<Long> pageIndex, @QueryParam(Pagination.SIZE_PARAM) Optional<Long> pageSize) {
+        List<DbEntry> entries = queryDAO.getAllEntriesNoPagination();
 
-    @GET
-    @Path("/download.torrent")
-    @Produces(ExtraMediaType.TEXT_HTML)
-    public Response downloadTorrent() {
+        StreamingOutput stream = output -> {
+            ZipOutputStream zos = new ZipOutputStream(output);
+
+            ZipEntry ze = new ZipEntry("register.txt");
+            zos.putNextEntry(ze);
+            zos.write("This will contain the /register data in JSON".getBytes());
+            zos.closeEntry();
+
+            ze = new ZipEntry("proof.txt");
+            zos.putNextEntry(ze);
+            zos.write("Unsure what this contains".getBytes());
+            zos.closeEntry();
+
+            entries.forEach(singleEntry -> {
+                JsonNode entryData = singleEntry.getContent().getContent();
+                ZipEntry singleZipEntry = new ZipEntry(String.format("item/%s.json", singleEntry.getSerialNumber()));
+                try {
+                    zos.putNextEntry(singleZipEntry);
+                    zos.write(entryData.toString().getBytes(StandardCharsets.UTF_8));
+                    zos.closeEntry();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+
+            zos.flush();
+            zos.close();
+        };
+
         return Response
-                .status(Response.Status.NOT_IMPLEMENTED)
-                .entity(viewFactory.thymeleafView("not-implemented.html"))
+                .ok(stream)
+                .header("Content-Disposition", String.format("attachment; filename=%s.zip", requestContext.getRegisterPrimaryKey()))
+                .header("Content-Transfer-Encoding", "binary")
                 .build();
     }
 
@@ -81,7 +111,7 @@ public class DataResource {
             return Optional.empty();
         }
         String[] tokens = requestURI.split("\\.");
-        return Optional.of(tokens[tokens.length-1]);
+        return Optional.of(tokens[tokens.length - 1]);
     }
 
     private void addContentDispositionHeader(String fileName) {
