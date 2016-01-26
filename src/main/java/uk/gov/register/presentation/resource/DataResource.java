@@ -40,7 +40,7 @@ public class DataResource {
     }
 
     @GET
-    @Path("/downloadRegister")
+    @Path("/download")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response downloadRegister(@QueryParam(Pagination.INDEX_PARAM) Optional<Long> pageIndex, @QueryParam(Pagination.SIZE_PARAM) Optional<Long> pageSize) {
         List<DbEntry> entries = queryDAO.getAllEntriesNoPagination();
@@ -78,25 +78,6 @@ public class DataResource {
                 .ok(stream)
                 .header("Content-Disposition", String.format("attachment; filename=%s.zip", requestContext.getRegisterPrimaryKey()))
                 .header("Content-Transfer-Encoding", "binary")
-                .build();
-    }
-
-
-    @GET
-    @Path("/download")
-    @Produces(ExtraMediaType.TEXT_HTML)
-    public View download() {
-        return viewFactory.thymeleafView("download.html");
-    }
-
-
-    @GET
-    @Path("/download.torrent")
-    @Produces(ExtraMediaType.TEXT_HTML)
-    public Response downloadTorrent() {
-        return Response
-                .status(Response.Status.NOT_IMPLEMENTED)
-                .entity(viewFactory.thymeleafView("not-implemented.html"))
                 .build();
     }
 
