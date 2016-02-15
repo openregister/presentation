@@ -18,7 +18,7 @@ import java.util.stream.StreamSupport;
 public class CsvWriter extends RepresentationWriter {
     @Override
     protected void writeEntriesTo(OutputStream entityStream, Iterable<String> fields, List<EntryView> entries) throws IOException, WebApplicationException {
-        entityStream.write(("entry," + String.join(",", fields) + "\r\n").getBytes(StandardCharsets.UTF_8));
+        entityStream.write(("entry," + String.join(",", fields) + "\r").getBytes(StandardCharsets.UTF_8));
         for (EntryView entry : entries) {
             writeRow(entityStream, fields, entry);
         }
@@ -27,7 +27,7 @@ public class CsvWriter extends RepresentationWriter {
     private void writeRow(OutputStream entityStream, Iterable<String> fields, EntryView entry) throws IOException {
         String row = StreamSupport.stream(fields.spliterator(),false)
                 .map(field -> escape(entry.getField(field).map(this::renderField).orElse("")))
-                .collect(Collectors.joining(",", entry.getSerialNumber() + ",", "\r\n"));
+                .collect(Collectors.joining(",", entry.getSerialNumber() + ",", "\r"));
         entityStream.write(row.getBytes(StandardCharsets.UTF_8));
     }
 
