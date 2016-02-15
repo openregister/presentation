@@ -34,7 +34,7 @@ public class CsvWriterTest {
                 ImmutableSet.of("key1", "key2", "key3", "key4"),
                 Collections.singletonList(entry));
 
-        assertThat(entityStream.contents, equalTo("entry,key1,key2,key3,key4\r\n52,valu\te1,\"val,ue2\",\"val\"\"ue3\",\"val\nue4\"\r\n"));
+        assertThat(entityStream.contents, equalTo("entry,key1,key2,key3,key4\r52,valu\te1,\"val,ue2\",\"val\"\"ue3\",\"val\nue4\"\r"));
     }
 
     @Test
@@ -60,7 +60,7 @@ public class CsvWriterTest {
                 ImmutableSet.of("key1", "key2"),
                 Collections.singletonList(entry));
 
-        assertThat(entityStream.contents, equalTo("entry,key1,key2\r\n52,value1;value2;value3,value4;value5;value6\r\n"));
+        assertThat(entityStream.contents, equalTo("entry,key1,key2\r52,value1;value2;value3,value4;value5;value6\r"));
     }
 
     @Test
@@ -76,6 +76,6 @@ public class CsvWriterTest {
                 ImmutableSet.of("key1", "key2", "key3", "key4"),
                 Collections.singletonList(entry));
 
-        assertThat(entityStream.contents, equalTo("entry,key1,key2,key3,key4\r\n52,value1,,,\r\n"));
+        assertThat(entityStream.contents, equalTo("entry,key1,key2,key3,key4\r52,value1,,,\r"));
     }
 }
