@@ -86,4 +86,13 @@ public class ApplicationTest extends FunctionalTestBase {
         assertThat(htmlElement.first().attr("lang"), equalTo("en"));
         assertThat(htmlElement.first().attr("xml:lang"), equalTo("en"));
     }
+
+    @Test
+    public void appSupportsFavicon() throws Exception {
+        Response response = client.target("http://address.openregister.dev:" + APPLICATION_PORT + "/favicon.ico")
+                .request()
+                .get();
+
+        assertThat(response.getStatusInfo().getFamily(), equalTo(Response.Status.Family.REDIRECTION));
+    }
 }

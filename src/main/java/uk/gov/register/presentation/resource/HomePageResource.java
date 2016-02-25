@@ -10,6 +10,8 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
 
 @Path("/")
 public class HomePageResource {
@@ -34,5 +36,11 @@ public class HomePageResource {
     public String robots() {
         return "User-agent: *\n" +
                 "Disallow: /\n";
+    }
+
+    @GET
+    @Path("/favicon.ico")
+    public Response favicon() {
+        return Response.temporaryRedirect(UriBuilder.fromUri("/assets/images/favicon.ico").build()).build();
     }
 }
