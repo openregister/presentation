@@ -11,13 +11,21 @@
         <div class="column-third" th:include="main.html :: attribution"></div>
     </div>
     <table th:if="${#lists.isEmpty(entries) == false}">
+        <caption th:if="${pagination.singlePage}"
+                 th:text="${pagination.totalEntries + ' records'}"></caption>
+        <caption th:unless="${pagination.singlePage}"
+                 th:text="${'Records ' + pagination.firstEntryNumberOnThisPage + '-' + pagination.lastEntryNumberOnThisPage +' of ' + pagination.totalEntries}"></caption>
         <thead>
-            <tr>
-                <th scope="col"><a th:href="${@uk.gov.register.presentation.HtmlViewSupport@fieldLink(registerId, registerDomain)}" th:text="${registerId}"></a></th>
-                <th:block th:each="fieldName : ${register.nonPrimaryFields}">
-                    <th scope="col"><a th:href="${@uk.gov.register.presentation.HtmlViewSupport@fieldLink(fieldName, registerDomain)}" th:text="${fieldName}"></a></th>
-                </th:block>
-            </tr>
+        <tr>
+            <th scope="col"><a
+                    th:href="${@uk.gov.register.presentation.HtmlViewSupport@fieldLink(registerId, registerDomain)}"
+                    th:text="${registerId}"></a></th>
+            <th:block th:each="fieldName : ${register.nonPrimaryFields}">
+                <th scope="col"><a
+                        th:href="${@uk.gov.register.presentation.HtmlViewSupport@fieldLink(fieldName, registerDomain)}"
+                        th:text="${fieldName}"></a></th>
+            </th:block>
+        </tr>
         </thead>
         <tbody>
         <tr th:each="entry : ${entries}">
@@ -29,7 +37,8 @@
                             <li th:text="${fieldValue.value}"></li>
                         </th:block>
                     </ul>
-                    <th:block th:unless="${entry.getField(fieldName).get().isList()}" th:text="${entry.getField(fieldName).get().value}">
+                    <th:block th:unless="${entry.getField(fieldName).get().isList()}"
+                              th:text="${entry.getField(fieldName).get().value}">
                     </th:block>
                 </td>
                 <td th:unless="${entry.getField(fieldName).present}"></td>

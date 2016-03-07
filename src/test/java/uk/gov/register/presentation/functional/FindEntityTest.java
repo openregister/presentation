@@ -2,6 +2,9 @@ package uk.gov.register.presentation.functional;
 
 import com.google.common.collect.ImmutableList;
 import org.json.JSONException;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -42,4 +45,15 @@ public class FindEntityTest extends FunctionalTestBase {
                 "\"entry\":{\"name\":\"presley\",\"address\":\"6789\"}}"
                 , response.readEntity(String.class), false);
     }
+
+    @Test
+    public void entryTableHasValidCaption() throws JSONException {
+        Response response = getRequest("/address/12345");
+
+        Document doc = Jsoup.parse(response.readEntity(String.class));
+        Elements htmlElement = doc.select("table > caption");
+        assertThat(htmlElement.size(), equalTo(1));
+        assertThat(htmlElement.first().text(), equalTo("Entry fields and values"));
+    }
+
 }
