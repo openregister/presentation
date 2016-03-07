@@ -85,5 +85,14 @@ public class RecordsResourceFunctionalTest extends FunctionalTestBase {
         assertThat(htmlElement.first().attr("xml:lang"), equalTo("en"));
     }
 
+    @Test
+    public void recordsTableHasCaption() {
+        Response response = getRequest("address", "/records");
+
+        Document doc = Jsoup.parse(response.readEntity(String.class));
+        Elements htmlElement = doc.select("table > caption");
+        assertThat(htmlElement.size(), equalTo(1));
+        assertThat(htmlElement.first().text(), equalTo("3 records"));
+    }
 }
 

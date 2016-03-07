@@ -12,6 +12,10 @@
     </div>
 
     <table th:if="${#lists.isEmpty(entries) == false}">
+        <caption th:if="${pagination.singlePage}"
+                 th:text="${pagination.totalEntries + ' entries'}"></caption>
+        <caption th:unless="${pagination.singlePage}"
+                 th:text="${'Entries ' + pagination.firstEntryNumberOnThisPage + '-' + pagination.lastEntryNumberOnThisPage +' of ' + pagination.totalEntries}"></caption>
         <thead>
         <tr>
             <th scope="col">Entry</th>

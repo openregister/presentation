@@ -1,11 +1,14 @@
 package uk.gov.register.presentation.functional;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.google.common.collect.ImmutableList;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import uk.gov.register.presentation.functional.testSupport.DBSupport;
 
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
@@ -29,14 +32,5 @@ public class EntriesResourceFunctionalTest extends FunctionalTestBase {
         assertThat(response.getHeaderString(HttpHeaders.CONTENT_DISPOSITION), containsString("filename=\"address-entries.json\""));
     }
 
-    @Test
-    public void entriesPageHasXhtmlLangAttributes() throws Throwable {
-        Response response = getRequest("address", "/entries");
 
-        Document doc = Jsoup.parse(response.readEntity(String.class));
-        Elements htmlElement = doc.select("html");
-        assertThat(htmlElement.size(), equalTo(1));
-        assertThat(htmlElement.first().attr("lang"), equalTo("en"));
-        assertThat(htmlElement.first().attr("xml:lang"), equalTo("en"));
-    }
 }

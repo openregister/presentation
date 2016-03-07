@@ -1,7 +1,11 @@
 package uk.gov.register.presentation.functional;
 
 import com.google.common.collect.ImmutableList;
+import org.hamcrest.MatcherAssert;
 import org.json.JSONException;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -45,4 +49,13 @@ public class HistoryTest extends FunctionalTestBase {
         assertThat(response.getStatus(), equalTo(406));
     }
 
+    @Test
+    public void historyTableHasCaption() {
+        Response response = getRequest("/address/145678/history");
+
+        Document doc = Jsoup.parse(response.readEntity(String.class));
+        Elements htmlElement = doc.select("table > caption");
+        MatcherAssert.assertThat(htmlElement.size(), equalTo(1));
+        MatcherAssert.assertThat(htmlElement.first().text(), equalTo("Entry history"));
+    }
 }
