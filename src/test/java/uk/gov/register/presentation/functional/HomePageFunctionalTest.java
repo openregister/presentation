@@ -21,7 +21,7 @@ public class HomePageFunctionalTest extends FunctionalTestBase {
 
     @Test
     public void homepageHasXhtmlLangAttributes() throws Throwable {
-        DBSupport.publishMessages("address", Collections.singletonList("{\"address\":\"1234\"}"));
+        dbSupport.publishMessages("address", Collections.singletonList("{\"address\":\"1234\"}"));
         Response response = getRequest("/");
 
         Document doc = Jsoup.parse(response.readEntity(String.class));
