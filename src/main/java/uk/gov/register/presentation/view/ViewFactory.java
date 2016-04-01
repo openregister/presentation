@@ -11,6 +11,7 @@ import uk.gov.register.presentation.config.PublicBody;
 import uk.gov.register.presentation.config.RegisterDomainConfiguration;
 import uk.gov.register.presentation.dao.Entry;
 import uk.gov.register.presentation.dao.Item;
+import uk.gov.register.presentation.dao.Record;
 import uk.gov.register.presentation.resource.Pagination;
 import uk.gov.register.presentation.resource.RequestContext;
 import uk.gov.register.thymeleaf.ThymeleafView;
@@ -110,5 +111,9 @@ public class ViewFactory {
 
     public NewEntryListView getNewEntriesView(List<Entry> entries) {
         return new NewEntryListView(requestContext, getCustodian(), getBranding(), entries);
+    }
+
+    public RecordView getRecordView(Record record) {
+        return new RecordView(requestContext, getCustodian(), getBranding(), entryConverter, record);
     }
 }
