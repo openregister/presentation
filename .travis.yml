@@ -11,6 +11,10 @@ addons:
     packages:
     - python3.5
     - python3.5-venv
+env:
+  global:
+    - COMMIT=${TRAVIS_COMMIT::7}
+    - REPOSITORY=slawekm/openregister-presentation
 cache:
   directories:
   - $HOME/.gradle/caches
@@ -20,6 +24,12 @@ before_script:
 - psql -c 'create database ft_presentation;' -U postgres
 script:
 - ./gradlew clean build
+- export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
+- docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+- docker build -t $REPOSITORY:$COMMIT .
+- docker tag $REPOSITORY:$COMMIT $REPOSITORY:$TAG
+- docker push $REPOSITORY
+
 deploy:
 - provider: s3
   access_key_id: AKIAI5JSOOUBYFGE7NEA
