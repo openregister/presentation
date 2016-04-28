@@ -8,6 +8,7 @@ import uk.gov.organisation.client.GovukOrganisation;
 import uk.gov.register.presentation.config.PublicBody;
 import uk.gov.register.presentation.dao.Entry;
 import uk.gov.register.presentation.representations.CsvRepresentation;
+import uk.gov.register.presentation.representations.RdfModeller;
 import uk.gov.register.presentation.representations.RepresentationView;
 import uk.gov.register.presentation.resource.RequestContext;
 
@@ -58,7 +59,7 @@ public class NewEntryView extends AttributionView implements RepresentationView<
     }
 
     public URI itemUri() {
-        String path = String.format(ItemView.ITEM_PREFIX, getRegisterId(), getRegisterDomain());
+        String path = String.format(RdfModeller.ITEM_PREFIX, getRegisterId(), getRegisterDomain());
         return uriWithScheme(path).path(entry.getSha256hex()).build();
     }
 
