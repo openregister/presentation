@@ -3,8 +3,10 @@ package uk.gov.register.presentation.dao;
 import io.dropwizard.java8.jdbi.args.InstantMapper;
 import org.skife.jdbi.v2.sqlobject.Bind;
 import org.skife.jdbi.v2.sqlobject.SqlQuery;
+import org.skife.jdbi.v2.sqlobject.customizers.FetchSize;
 import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
 import org.skife.jdbi.v2.sqlobject.customizers.SingleValueResult;
+import org.skife.jdbi.v2.sqlobject.mixins.Transactional;
 
 import java.time.Instant;
 import java.util.Collection;
@@ -12,15 +14,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
-public interface EntryDAO {
+public interface EntryDAO extends Transactional<EntryDAO> {
     @SqlQuery("select * from entry where entry_number=:entry_number")
     @RegisterMapper(EntryMapper.class)
     @SingleValueResult(Entry.class)
     Optional<Entry> findByEntryNumber(@Bind("entry_number") int entryNumber);
 
-    @SqlQuery("select * from entry ORDER BY entry_number asc limit :limit")
+    // FIXME: "lower" and "upper" names are rubbish
+    @SqlQuery("select * from entry WHERE entry_number >= :lower AND entry_number < :upper ORDER BY entry_number")
     @RegisterMapper(EntryMapper.class)
-    Iterator<Entry> entriesIterator(@Bind("limit") long limit);
+    @FetchSize(262144) // Has to be non-zero to enable cursor mode https://jdbc.postgresql.org/documentation/head/query.html#query-with-cursor
+    Iterator<Entry> entriesIterator(@Bind("lower") long lower, @Bind("upper") long upper);
 
     @SqlQuery("select * from entry ORDER BY entry_number desc limit :limit offset :offset")
     @RegisterMapper(EntryMapper.class)
