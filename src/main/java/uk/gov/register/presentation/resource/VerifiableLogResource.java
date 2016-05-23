@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.google.common.collect.Iterators;
 import org.apache.commons.lang3.StringUtils;
 import uk.gov.register.presentation.dao.Entry;
 import uk.gov.register.presentation.dao.EntryDAO;
@@ -30,9 +31,12 @@ public class VerifiableLogResource {
 
     @Inject
     public VerifiableLogResource(EntryDAO entryDAO) throws NoSuchAlgorithmException {
+        final int limit = 3000000;
         this.verifiableLog = new MerkleTree(MessageDigest.getInstance("SHA-256"),
                 i -> bytesFromEntry(entryDAO.findByEntryNumber(i + 1)),
-                entryDAO::getTotalEntries);
+                () -> limit,
+                () -> Iterators.transform(entryDAO.entriesIterator(limit),entry -> bytesFromEntry(Optional.of(entry)))
+        );
     }
 
     @GET

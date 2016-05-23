@@ -8,6 +8,7 @@ import org.skife.jdbi.v2.sqlobject.customizers.SingleValueResult;
 
 import java.time.Instant;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +17,10 @@ public interface EntryDAO {
     @RegisterMapper(EntryMapper.class)
     @SingleValueResult(Entry.class)
     Optional<Entry> findByEntryNumber(@Bind("entry_number") int entryNumber);
+
+    @SqlQuery("select * from entry ORDER BY entry_number asc limit :limit")
+    @RegisterMapper(EntryMapper.class)
+    Iterator<Entry> entriesIterator(@Bind("limit") long limit);
 
     @SqlQuery("select * from entry ORDER BY entry_number desc limit :limit offset :offset")
     @RegisterMapper(EntryMapper.class)
