@@ -1,6 +1,7 @@
 package uk.gov.register.presentation.dao;
 
 import io.dropwizard.java8.jdbi.args.InstantMapper;
+import org.skife.jdbi.v2.ResultIterator;
 import org.skife.jdbi.v2.sqlobject.Bind;
 import org.skife.jdbi.v2.sqlobject.SqlQuery;
 import org.skife.jdbi.v2.sqlobject.customizers.FetchSize;
@@ -24,7 +25,7 @@ public interface EntryDAO extends Transactional<EntryDAO> {
     @SqlQuery("select * from entry WHERE entry_number >= :lower AND entry_number < :upper ORDER BY entry_number")
     @RegisterMapper(EntryMapper.class)
     @FetchSize(262144) // Has to be non-zero to enable cursor mode https://jdbc.postgresql.org/documentation/head/query.html#query-with-cursor
-    Iterator<Entry> entriesIterator(@Bind("lower") long lower, @Bind("upper") long upper);
+    ResultIterator<Entry> entriesIterator(@Bind("lower") long lower, @Bind("upper") long upper);
 
     @SqlQuery("select * from entry ORDER BY entry_number desc limit :limit offset :offset")
     @RegisterMapper(EntryMapper.class)
@@ -41,5 +42,6 @@ public interface EntryDAO extends Transactional<EntryDAO> {
     @RegisterMapper(EntryMapper.class)
     @SqlQuery("SELECT * from entry order by entry_number desc")
     Collection<Entry> getAllEntriesNoPagination();
+
 }
 
