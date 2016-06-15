@@ -77,10 +77,8 @@ public class VerifiableLogResource {
 
     private MerkleTree merkleTree() throws NoSuchAlgorithmException {
         return new MerkleTree(MessageDigest.getInstance("SHA-256"),
-                (i, j) -> Iterators.transform(
-                        entryDAO.entriesIterator(i + 1, j + 1),
-                        this::bytesFromEntry),
-                () -> entryDAO.getTotalEntries());
+                i -> bytesFromEntry(entryDAO.findByEntryNumber(i + 1).get()),
+                entryDAO::getTotalEntries);
     }
 
     private byte[] bytesFromEntry(Entry value) {
