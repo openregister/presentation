@@ -40,7 +40,7 @@ public class VerifiableLogResource {
         try {
             // need to use a transaction to enable use of a cursor
             entryDAO.begin();
-            MerkleTree merkleTree = merkleTree(entryDAO, entryDAO.getTotalEntries() + 1);
+            MerkleTree merkleTree = merkleTree(entryDAO);
             return bytesToString(merkleTree.currentRoot());
         } finally {
             entryDAO.rollback();
@@ -53,7 +53,7 @@ public class VerifiableLogResource {
     public String getAuditPath(@PathParam("entry-number") int entryNumber, @PathParam("snapshot") int snapshot) throws NoSuchAlgorithmException {
         try {
             entryDAO.begin();
-            MerkleTree merkleTree = merkleTree(entryDAO, snapshot + 1);
+            MerkleTree merkleTree = merkleTree(entryDAO);
             List<String> path = bytesToString(merkleTree.pathToRootAtSnapshot(entryNumber - 1, snapshot));
             return StringUtils.join(path, ",");
         } finally {
@@ -67,7 +67,7 @@ public class VerifiableLogResource {
     public String getConsistencySet(@PathParam("m") int m, @PathParam("n") int n) throws NoSuchAlgorithmException {
         try {
             entryDAO.begin();
-            MerkleTree merkleTree = merkleTree(entryDAO, n + 1);
+            MerkleTree merkleTree = merkleTree(entryDAO);
             List<String> path = bytesToString(merkleTree.snapshotConsistency(m, n));
             return StringUtils.join(path, ",");
         } finally {
@@ -75,12 +75,12 @@ public class VerifiableLogResource {
         }
     }
 
-    private MerkleTree merkleTree(EntryDAO entryDAO, int fetchSize) throws NoSuchAlgorithmException {
+    private MerkleTree merkleTree(EntryDAO entryDAO) throws NoSuchAlgorithmException {
 
-        EntryIteratorDAO eid = new EntryIteratorDAO(entryDAO, fetchSize);
+        EntryIteratorDAO eid = new EntryIteratorDAO(entryDAO);
 
         return new MerkleTree(MessageDigest.getInstance("SHA-256"),
-                i -> bytesFromEntry(eid.findByEntryNumber(i + 1)),
+                leafIndex -> bytesFromEntry(eid.findByEntryNumber(leafIndex + 1)),
                 entryDAO::getTotalEntries);
     }
 

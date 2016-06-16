@@ -21,11 +21,10 @@ public interface EntryDAO extends Transactional<EntryDAO> {
     @SingleValueResult(Entry.class)
     Optional<Entry> findByEntryNumber(@Bind("entry_number") int entryNumber);
 
-    // FIXME: "lower" and "upper" names are rubbish
-    @SqlQuery("select * from entry WHERE entry_number >= :lower AND entry_number < :upper ORDER BY entry_number")
+    @SqlQuery("select * from entry WHERE entry_number >= :entryNumber ORDER BY entry_number")
     @RegisterMapper(EntryMapper.class)
     @FetchSize(262144) // Has to be non-zero to enable cursor mode https://jdbc.postgresql.org/documentation/head/query.html#query-with-cursor
-    ResultIterator<Entry> entriesIterator(@Bind("lower") long lower, @Bind("upper") long upper);
+    ResultIterator<Entry> entriesIteratorFrom(@Bind("entryNumber") long entryNumber);
 
     @SqlQuery("select * from entry ORDER BY entry_number desc limit :limit offset :offset")
     @RegisterMapper(EntryMapper.class)

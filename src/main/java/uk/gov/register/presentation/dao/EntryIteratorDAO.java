@@ -6,23 +6,20 @@ public class EntryIteratorDAO {
 
 
     private final EntryDAO entryDAO;
-    private final int fetchSize;
     private int nextValidEntryNumber = -1;
     private ResultIterator<Entry> iterator;
 
-    public EntryIteratorDAO(EntryDAO entryDAO, int fetchSize){
+    public EntryIteratorDAO(EntryDAO entryDAO){
         this.entryDAO = entryDAO;
-        this.fetchSize = fetchSize;
         this.nextValidEntryNumber = -1;
     }
 
     public Entry findByEntryNumber(int entryNumber) {
-
         if ((iterator == null) || (entryNumber != nextValidEntryNumber)){
             if(iterator != null){
                 iterator.close();
             }
-            iterator = entryDAO.entriesIterator(entryNumber, fetchSize);
+            iterator = entryDAO.entriesIteratorFrom(entryNumber);
             nextValidEntryNumber = entryNumber;
         }
 
