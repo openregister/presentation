@@ -8,6 +8,8 @@ import org.apache.commons.lang3.StringUtils;
 import uk.gov.register.presentation.dao.Entry;
 import uk.gov.register.presentation.dao.EntryDAO;
 import uk.gov.register.presentation.dao.EntryIteratorDAO;
+import uk.gov.verifiablelog.merkletree.InMemoryPowOfTwo;
+import uk.gov.verifiablelog.merkletree.MemoizationStore;
 import uk.gov.verifiablelog.merkletree.MerkleTree;
 
 import javax.inject.Inject;
@@ -19,6 +21,7 @@ import javax.ws.rs.core.MediaType;
 import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -27,6 +30,8 @@ import static java.util.stream.Collectors.toList;
 public class VerifiableLogResource {
 
     private final EntryDAO entryDAO;
+
+    private MemoizationStore memoizationStore = new InMemoryPowOfTwo();
 
     @Inject
     public VerifiableLogResource(EntryDAO entryDAO) throws NoSuchAlgorithmException {
@@ -54,8 +59,9 @@ public class VerifiableLogResource {
         try {
             entryDAO.begin();
             MerkleTree merkleTree = merkleTree(entryDAO);
-            List<String> path = bytesToString(merkleTree.pathToRootAtSnapshot(entryNumber - 1, snapshot));
-            return StringUtils.join(path, ",");
+//            List<String> path =  bytesToString(merkleTree.pathToRootAtSnapshot(entryNumber - 1, snapshot));
+//            return StringUtils.join(path, ",");
+            return "not implemented yet";
         } finally {
             entryDAO.rollback();
         }
@@ -68,8 +74,10 @@ public class VerifiableLogResource {
         try {
             entryDAO.begin();
             MerkleTree merkleTree = merkleTree(entryDAO);
-            List<String> path = bytesToString(merkleTree.snapshotConsistency(m, n));
-            return StringUtils.join(path, ",");
+//            List<String> path = bytesToString(merkleTree.snapshotConsistency(m, n));
+//            return StringUtils.join(path, ",");
+            return "not implemented yet";
+
         } finally {
             entryDAO.rollback();
         }
@@ -81,7 +89,8 @@ public class VerifiableLogResource {
 
         return new MerkleTree(MessageDigest.getInstance("SHA-256"),
                 leafIndex -> bytesFromEntry(eid.findByEntryNumber(leafIndex + 1)),
-                entryDAO::getTotalEntries);
+                entryDAO::getTotalEntries,
+                memoizationStore);
     }
 
     private byte[] bytesFromEntry(Entry value) {
