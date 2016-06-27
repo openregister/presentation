@@ -31,11 +31,12 @@ public class VerifiableLogResource {
 
     private final EntryDAO entryDAO;
 
-    private MemoizationStore memoizationStore = new InMemoryPowOfTwo();
+    private MemoizationStore memoizationStore;
 
     @Inject
-    public VerifiableLogResource(EntryDAO entryDAO) throws NoSuchAlgorithmException {
+    public VerifiableLogResource(EntryDAO entryDAO, MemoizationStore memoizationStore) throws NoSuchAlgorithmException {
         this.entryDAO = entryDAO;
+        this.memoizationStore = memoizationStore;
     }
 
     @GET
