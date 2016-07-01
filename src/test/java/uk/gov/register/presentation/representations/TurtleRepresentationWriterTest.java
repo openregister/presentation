@@ -11,6 +11,7 @@ import uk.gov.register.presentation.*;
 import uk.gov.register.presentation.config.Field;
 import uk.gov.register.presentation.config.FieldsConfiguration;
 import uk.gov.register.presentation.config.RegistersConfiguration;
+import uk.gov.register.presentation.config.RegisterDomainConfiguration;
 import uk.gov.register.presentation.dao.Entry;
 import uk.gov.register.presentation.dao.Item;
 import uk.gov.register.presentation.representations.turtle.EntryTurtleWriter;
@@ -46,9 +47,11 @@ public class TurtleRepresentationWriterTest {
 
     @Before
     public void setUp() throws Exception {
-        requestContext = new RequestContext(new RegistersConfiguration(Optional.empty()), () -> "test.register.gov.uk") {
-            @Override
-            public String getScheme() { return "http"; }
+        RegisterDomainConfiguration registerDomainConfiguration = new RegisterDomainConfiguration() {
+                public String getRegisterScheme() { return "http"; }
+                public String getRegisterDomain() { return "test.register.gov.uk"; }
+        };
+        requestContext = new RequestContext(new RegistersConfiguration(Optional.empty()), registerDomainConfiguration) {
             @Override
             public String getRegisterPrimaryKey() { return "address"; }
         };
