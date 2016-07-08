@@ -27,12 +27,22 @@ public class PresentationConfiguration extends Configuration implements GovukCli
     private String registerDomain = "openregister.org";
 
     @Valid
+    @NotNull
+    @JsonProperty
+    private String registerScheme = "https";
+
+    @Valid
     @JsonProperty
     private boolean enableDownloadResource = false;
 
     @Override
     public String getRegisterDomain() {
         return registerDomain;
+    }
+
+    @Override
+    public String getRegisterScheme() {
+        return registerScheme;
     }
 
     public DataSourceFactory getDatabase() {

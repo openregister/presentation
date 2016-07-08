@@ -28,12 +28,12 @@ public class RequestContext {
 
     private final RegistersConfiguration registersConfiguration;
 
-    private final String registerDomain;
+    private final RegisterDomainConfiguration registerDomainConfiguration;
 
     @Inject
     public RequestContext(RegistersConfiguration registersConfiguration, RegisterDomainConfiguration domainConfiguration) {
         this.registersConfiguration = registersConfiguration;
-        this.registerDomain = domainConfiguration.getRegisterDomain();
+        this.registerDomainConfiguration = domainConfiguration;
     }
 
     public String getRegisterPrimaryKey() {
@@ -41,7 +41,7 @@ public class RequestContext {
     }
 
     public String getScheme() {
-        return httpServletRequest.getScheme();
+        return registerDomainConfiguration.getRegisterScheme();
     }
 
     public HttpServletRequest getHttpServletRequest() {
@@ -65,7 +65,7 @@ public class RequestContext {
     }
 
     public String getRegisterDomain() {
-        return registerDomain;
+        return registerDomainConfiguration.getRegisterDomain();
     }
 
     public Optional<String> resourceExtension() {

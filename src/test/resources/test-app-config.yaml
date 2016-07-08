@@ -8,6 +8,7 @@ server:
       port: 9001
 
 registerDomain: test.register.gov.uk
+registerScheme: http
 
 database:
   driverClass: org.postgresql.Driver

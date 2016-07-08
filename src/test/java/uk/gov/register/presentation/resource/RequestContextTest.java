@@ -21,7 +21,7 @@ public class RequestContextTest {
 
     @Test
     public void takesRegisterNameFromHttpHost() throws Exception {
-        RequestContext requestContext = new RequestContext(new RegistersConfiguration(Optional.empty()), () -> "");
+        RequestContext requestContext = new RequestContext(new RegistersConfiguration(Optional.empty()), new EmptyRegisterDomainConfiguration());
         requestContext.httpServletRequest = httpServletRequest;
         when(httpServletRequest.getHeader("Host")).thenReturn("school.beta.openregister.org");
 
@@ -32,7 +32,7 @@ public class RequestContextTest {
 
     @Test
     public void behavesGracefullyWhenGivenHostWithNoDots() throws Exception {
-        RequestContext requestContext = new RequestContext(new RegistersConfiguration(Optional.empty()), () -> "");
+        RequestContext requestContext = new RequestContext(new RegistersConfiguration(Optional.empty()), new EmptyRegisterDomainConfiguration());
         requestContext.httpServletRequest = httpServletRequest;
         when(httpServletRequest.getHeader("Host")).thenReturn("school");
 
@@ -43,7 +43,7 @@ public class RequestContextTest {
 
     @Test
     public void resourceExtension_returnsTheResourceExtensionIfExists() {
-        RequestContext requestContext = new RequestContext(new RegistersConfiguration(Optional.empty()), () -> "");
+        RequestContext requestContext = new RequestContext(new RegistersConfiguration(Optional.empty()), new EmptyRegisterDomainConfiguration());
         requestContext.httpServletRequest = httpServletRequest;
         when(httpServletRequest.getRequestURI()).thenReturn("/foo/bar.json");
 
@@ -52,7 +52,7 @@ public class RequestContextTest {
 
     @Test
     public void resourceExtension_returnsEmptyIfResourceExtensionIsNotExists() {
-        RequestContext requestContext = new RequestContext(new RegistersConfiguration(Optional.empty()), () -> "");
+        RequestContext requestContext = new RequestContext(new RegistersConfiguration(Optional.empty()), new EmptyRegisterDomainConfiguration());
         requestContext.httpServletRequest = httpServletRequest;
         when(httpServletRequest.getRequestURI()).thenReturn("/foo/bar");
 

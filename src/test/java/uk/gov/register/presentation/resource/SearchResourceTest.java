@@ -29,7 +29,7 @@ public class SearchResourceTest {
 
     @Before
     public void setUp() throws Exception {
-        requestContext = new RequestContext(new RegistersConfiguration(Optional.empty()), () -> ""){
+        requestContext = new RequestContext(new RegistersConfiguration(Optional.empty()), new EmptyRegisterDomainConfiguration()){
             @Override
             public HttpServletResponse getHttpServletResponse() {
                 return servletResponse;
