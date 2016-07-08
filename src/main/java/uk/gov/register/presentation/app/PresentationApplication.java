@@ -38,7 +38,7 @@ import uk.gov.register.presentation.representations.ExtraMediaType;
 import uk.gov.register.presentation.resource.RequestContext;
 import uk.gov.register.presentation.view.ViewFactory;
 import uk.gov.register.thymeleaf.ThymeleafViewRenderer;
-import uk.gov.verifiablelog.store.memoization.InMemoryPowOfTwo;
+import uk.gov.verifiablelog.store.memoization.InMemoryPowOfTwoNoLeaves;
 import uk.gov.verifiablelog.store.memoization.MemoizationStore;
 
 import javax.inject.Singleton;
@@ -114,7 +114,7 @@ public class PresentationApplication extends Application<PresentationConfigurati
                 bind(ViewFactory.class).to(ViewFactory.class).in(Singleton.class);
                 bind(ItemConverter.class).to(ItemConverter.class).in(Singleton.class);
                 bind(GovukOrganisationClient.class).to(GovukOrganisationClient.class).in(Singleton.class);
-                bind(InMemoryPowOfTwo.class).to(MemoizationStore.class).in(Singleton.class);
+                bind(InMemoryPowOfTwoNoLeaves.class).to(MemoizationStore.class).in(Singleton.class);
                 bind(configuration);
                 bind(client).to(Client.class);
             }
